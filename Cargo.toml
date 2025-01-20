@@ -1,0 +1,8 @@
+[package]
+name = "asteroid"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+macroquad = { version = "0.4", features = ["audio"] }
+rand = { version = "0.8", features = ["small_rng"] }

@@ -1,0 +1,106 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Bc3prpbW)
+= Jeu _Asteroids_
+Stéphane Lopes <stephane.lopes@uvsq.fr>, Pablo de Oliveira Castro <pablo.oliveira@uvsq.fr>, Benjamin Cohen-Boulakia <benjamin.cohen-boulakia@uvsq.fr>
+v2024-2025
+:stem:
+:icons: font
+:experimental:
+:source-highlighter: highlightjs
+:imagesdir: figs/
+
+L'objectif de ce mini-projet est de créer une application pour jouer à https://fr.wikipedia.org/wiki/Asteroids[_Asteroids_].
+L'application utilisera la bibliothèque https://macroquad.rs/[Macroquad] pour gérer les aspects graphiques du programme.
+
+Ce sujet est volontairement peu contraignant afin de vous laisser proposer vos propres évolutions.
+Vous n'êtes pas limités à l'utilisation de la bibliothèque standard et vous êtes libres d'utiliser d'autres _crates_.
+
+[CAUTION]
+====
+* Le projet est à réaliser en binôme.
+* Le projet initial est géré avec `cargo` et est structuré en plusieurs modules et fichiers.
+Les commandes https://doc.rust-lang.org/cargo/commands/cargo-build.html[`cargo build`] et https://doc.rust-lang.org/cargo/commands/cargo-run.html[`cargo run`] doivent permettre respectivement de compiler et d'exécuter le projet.
+* Pensez à valider régulièrement votre travail avec `git`.
+* Respectez le https://doc.rust-lang.org/style-guide/index.html[guide de style] Rust dans votre code source.
+La commande `cargo fmt` vous permet de mettre en forme votre code avant les commits et https://doc.rust-lang.org/clippy/usage.html[`cargo clippy`].
+* L'affichage et les interactions avec l'utilisateur seront implémentés dans le fichier `main.rs`.
+Les objets astéroïdes, vaisseau et missiles seront gérés dans leurs propres modules.
+Ces derniers sont dénommés _modèle_ dans la suite.
+* Documentez le code du modèle conformément aux recommandations et ajoutez des tests unitaires.
+Les commandes https://doc.rust-lang.org/cargo/commands/cargo-doc.html[`cargo doc`] et https://doc.rust-lang.org/cargo/commands/cargo-test.html[`cargo test`] permettent respectivement de générer la documentation des modules et de lancer les tests.
+====
+
+== Fonctionnalités
+Les objets à l’écran (vaisseau, astéroïdes, missiles) sont considérés de forme ronde, afin de faciliter la gestion des collision.
+
+Les astéroïdes se déplacent selon une vitesse constante, déterminée aléatoirement.
+
+Le vaisseau a un déplacement déterminé par l’inertie, c’est-à-dire que, sans action du joueur, il se déplace en ligne droite, sans perte de vitesse.
+Le joueur peut utiliser le clavier pour modifier l’orientation du vaisseau, ou pour activer la poussée, ce qui fera dévier et accélérer/ralentir le vaisseau dans le sens de son orientation.
+Lorsque le vaisseau touche un astéroïde, son niveau de bouclier baisse.
+Si le bouclier était déjà à 0, le vaisseau est détruit.
+
+Lorsque le vaisseau ou un astéroïde sort de l’écran, il réentre par le côté opposé.
+
+Le vaisseau tire de petits projectiles, se déplaçant à vitesse constante et dans la direction correspondant à l’orientation du vaisseau.
+
+Lorsque le projectile touche un astéroïde de grande taille celui-ci explose en deux astéroïdes plus petits.
+Si l’astéroïde est trop petit, il est totalement détruit.
+Lorsqu’un projectile touche un astéroïde, ou qu’il sort de l’écran, il disparaît.
+
+Le jeu se termine lorsque le vaisseau est détruit (défaite), tous les astéroïdes sont détruits (victoire), ou lorsque le joueur appuie sur la touche kbd:[Échap] (abandon).
+
+== Partie I : les astéroïdes
+Le module `asteroid` et la structure `Asteroid` permettent de gérer les astéroïdes du jeux (déjà présent dans le projet).
+
+1. Ajoutez la gestion de plusieurs astéroïdes.
+2. Ajoutez la prise en compte de la taille des astéroïdes.
+Trois tailles sont possibles (grande, moyenne, petite).
+À chaque collision, un astéroïde se scinde en deux morceaux de taille inférieure ou disparaît s'il était déjà petit.
+
+== Partie II : le vaisseau
+Le module `spaceship` et la structure `Spaceship` permettront de gérer le vaisseau.
+Par rapport à un astéroïde, le vaisseau dispose en plus d'une orientation.
+Quand l'utilisateur activera la poussée, la vitesse du vaisseau sera modifiée en fonction de l'orientation.
+
+1. Créez le module `spaceship` et ajoutez-y la structure `Spaceship`.
+2. Ajoutez l'affichage du vaisseau.
+3. Ajoutez la possibilité de contrôler le vaisseau avec les touches du clavier (kbd:[🠕] : poussée, kbd:[🠗] : rétro-poussée, kbd:[➞] : rotation à droite, kbd:[🠔] : rotation à gauche).
+4. Gérer la collision entre le vaisseau et un astéroïde en tenant compte du bouclier du vaisseau.
+
+== Partie III : les missiles
+Le module `missile` et la structure `Missile` permettront de gérer les projectiles tirés par le vaisseau.
+
+1. Créez le module `missile` et ajoutez-y la structure `Missile`.
+2. Ajoutez l'affichage du missile.
+On rappelle que le missile disparaît lorsqu'il sort de l'écran.
+3. Ajoutez le tir du missile par la touche kbd:[Espace].
+4. Gérer la collision entre un missile et un astéroïde.
+
+== Partie IV : un trait pour les rassembler tous
+Plusieurs points communs existent entre les divers éléments du jeu.
+Dans cette partie, vous allez factoriser ces comportements dans un type `StellarObject`.
+
+1. Créez le module `stellarobject` et ajoutez-y le trait `StellarObject`.
+2. Ajoutez des méthodes pour gérer le déplacement et l'effet d'une collision.
+3. Implémentez ce trait au niveau des structures représentant un astéroïde, un missile et le vaisseau.
+
+== Partie V: Pour aller plus loin (optionnel)
+Ce projet peut être amélioré de nombreuses façons.
+Cette section vous en suggère quelques unes.
+
+* Le fond d'écran du jeu est un peu triste en l'état.
+Une possibilité serait d'y ajouter quelques astres voire d'y afficher une image.
+Attention toutefois à ce que le jeu ne perde pas en lisibilité.
+* Il est de même possible de remplacer les formes géométriques par des images (https://fr.wikipedia.org/wiki/Sprite_(jeu_vid%C3%A9o)[_sprites_]).
+* Vous pouvez également envisager d'associer des sons au différents événements.
+* La physique du jeu peut aussi être améliorée.
+Le vaisseau pourrait ralentir lentement, les astéroïdes attirer leur environnement et entrer en collision entre eux, un trou noir pourrait apparaître, …
+* Le jeu peut proposer de calculer un score et des niveaux avec plus d'astéroïdes et/ou des astéroïdes plus rapides.
+* Sur le plan technique, un https://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur[modèle MVC] peut être implémenté pour séparer la logique d'affichage, du contrôle et du modèle.
+Ce modèle est particulièrement délicat à implémenter en Rust (https://stackoverflow.com/questions/76281050/cross-referencing-in-rust-implementing-mvc[Cross referencing in Rust - implementing MVC], https://fadeevab.com/mediator-pattern-in-rust/[The Hardest Pattern in Rust: Mediator], https://github.com/fadeevab/mediator-pattern-rust/[Mediator Pattern in Rust]).
+
+== Références
+* La description du jeu https://fr.wikipedia.org/wiki/Asteroids[Asteroids] sur Wikipedia
+* La bibliothèque https://macroquad.rs/[Macroquad], https://docs.rs/macroquad/latest/macroquad/[aide en ligne]
+* Un https://github.com/not-fl3/macroquad/blob/master/examples/asteroids.rs[exemple] de jeu Asteroids avec Macroquad
+* Un https://realpython.com/asteroids-game-python/[tutoriel en Python] pour implémenter un jeu Asteroids
